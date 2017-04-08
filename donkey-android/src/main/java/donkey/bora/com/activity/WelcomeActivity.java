@@ -18,9 +18,14 @@ public class WelcomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.start_bt)
-    void onClick() {
+    @OnClick(R.id.auth_bt)
+    void onStartClick() {
         startActivity(new Intent(this, EmailAuthActivity.class));
+    }
+
+    @OnClick(R.id.just_look_bt)
+    void onJustLook() {
+        startActivity(new Intent(this, BoardMainActivity.class));
     }
 
     @Override

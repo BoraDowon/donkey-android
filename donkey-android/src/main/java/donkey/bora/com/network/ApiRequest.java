@@ -1,9 +1,8 @@
-package donkey.bora.com.http;
+package donkey.bora.com.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import donkey.bora.com.Urls;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -20,7 +19,7 @@ public class ApiRequest {
                 .create();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(Urls.BASE_URL)
+                .baseUrl(IRequest.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }

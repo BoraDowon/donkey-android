@@ -26,7 +26,11 @@ public class IntroController implements IController {
     private Callback<Hello> helloCallback = new Callback<Hello>() {
         @Override
         public void onResponse(Call<Hello> call, Response<Hello> response) {
-            onHelloCallback.success();
+            if (response.body() != null && "success".equals(response.body().getMsg())) {
+                onHelloCallback.success();
+            } else {
+                onHelloCallback.fail();
+            }
         }
 
         @Override
@@ -34,8 +38,5 @@ public class IntroController implements IController {
             onHelloCallback.fail();
         }
     };
-
-
-
 
 }

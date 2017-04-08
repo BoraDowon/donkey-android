@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -71,6 +72,7 @@ public class IntroActivity extends AppCompatActivity {
         @Override
         public void success() {
             // FIXME
+            Log.d("doa", "success");
         }
 
         @Override

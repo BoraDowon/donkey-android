@@ -1,7 +1,6 @@
 package donkey.bora.com;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 
 public class BackPressCloseHandler {
@@ -15,7 +14,6 @@ public class BackPressCloseHandler {
     }
 
     public void onBackPressed() {
-        Log.d("doa", "backKeyTime: " + backKeyPressedTime);
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
             showGuide();

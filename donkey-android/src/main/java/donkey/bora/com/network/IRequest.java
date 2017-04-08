@@ -2,22 +2,22 @@ package donkey.bora.com.network;
 
 import java.util.List;
 
-import donkey.bora.com.model.Hello;
 import donkey.bora.com.model.JsonResponse;
+import donkey.bora.com.model.PreCheckVO;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
+import retrofit2.http.Query;
 
 public interface IRequest {
 
-    String BASE_URL = "http://10.0.2.2:8000";
+    //String BASE_URL = "http://10.0.2.2:8000";
+    String BASE_URL = "http://211.201.190.29:8080";
 
     @GET("hello")
-    Call<JsonResponse<Hello>> hello();
+    Call<JsonResponse<Object>> hello();
 
     @GET("pre-check")
-    @Headers({ "access_token: 1111111" })
-    Call<List<Object>> preCheck();
+    Call<JsonResponse<PreCheckVO>> preCheck(@Query("token") String token);
 
     @GET("intro")
     Call<List<Object>> intro();

@@ -30,6 +30,7 @@ public class IntroActivity extends AppCompatActivity {
         super.onStart();
 
         IntroController controller = new IntroController();
+        //controller.requestPreCheck(onHelloCallback);
         controller.requestHello(onHelloCallback);
     }
 
@@ -78,6 +79,7 @@ public class IntroActivity extends AppCompatActivity {
         @Override
         public void fail() {
             // FIXME
+            Log.d("doa", "fail");
         }
     };
 }

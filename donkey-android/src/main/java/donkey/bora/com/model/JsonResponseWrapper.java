@@ -1,18 +1,27 @@
 package donkey.bora.com.model;
 
+import android.util.Log;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public abstract class JsonResponseWrapper<T> implements Callback<JsonResponse<T>> {
 
+    private static final String TAG = "donkey";
+
+
     @Override
     public void onResponse(Call<JsonResponse<T>> call, Response<JsonResponse<T>> response) {
-        boolean isSuccess = false;
-        if (response.body() != null && "success".equals(response.body().getMsg())) {
-            isSuccess = true;
+        if (response.body() != null) {
+            if ("200".equals(response.body().getCode())) {
+                callback(response.body().getData(), true);
+            }
+            Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg());
+        } else {
+            Log.e(TAG, "[code]: " + response.raw().code() + ", [msg]: " + response.raw().message());
         }
-        callback(response.body().getData(), isSuccess);
+        callback(null, false);
     }
 
     @Override

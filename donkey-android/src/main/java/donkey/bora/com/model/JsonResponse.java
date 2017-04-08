@@ -1,9 +1,11 @@
 package donkey.bora.com.model;
 
-public class JsonResponse<T> {
+import java.io.Serializable;
 
-    private String msg;
+public class JsonResponse<T> implements Serializable {
+
     private String code;
+    private String msg;
     private T data;
 
     public String getMsg() {

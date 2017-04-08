@@ -1,7 +1,9 @@
 package donkey.bora.com.network;
 
+import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
 import donkey.bora.com.model.JsonResponse;
+import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.model.PreCheckVO;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,5 +18,12 @@ public interface IRequest {
     Call<JsonResponse<PreCheckVO>> preCheck(@Query("token") String token);
 
     @GET("email-check")
-    Call<JsonResponse<EmailCheckVO>> emailCheck(@Query("email") String email);
+    Call<JsonResponse<EmailCheckVO>> emailValidateCheck(@Query("email") String email);
+
+    @GET("gen-auth-key")
+    Call<JsonResponse<EmailAuthSendVO>> emailSend(@Query("email") String email);
+
+    @GET("confirm-auth-key")
+    Call<JsonResponse<PinCodeCheckVO>> pinCodeCheck(@Query("email") String email,
+                                                    @Query("auth_code") String pinCode);
 }

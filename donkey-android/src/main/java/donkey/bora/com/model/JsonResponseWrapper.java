@@ -14,13 +14,13 @@ public abstract class JsonResponseWrapper<T> implements Callback<JsonResponse<T>
     public void onResponse(Call<JsonResponse<T>> call, Response<JsonResponse<T>> response) {
         if (response.body() != null) {
             if ("200".equals(response.body().getCode())) {
-                Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg());
+                Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg() + ", [detail]: " + response.body().getDetail());
                 callback(response.body().getData(), true);
                 return;
             }
-            Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg());
+            Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg() + ", [detail]: " + response.body().getDetail());
         } else {
-            Log.e(TAG, "[code]: " + response.raw().code() + ", [msg]: " + response.raw().message());
+            Log.e(TAG, "[code]: " + response.raw().code() + ", [msg]: " + response.raw().message() + ", [detail]: " + response.body().getDetail());
         }
         callback(null, false);
     }

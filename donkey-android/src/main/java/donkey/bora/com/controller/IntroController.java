@@ -7,14 +7,11 @@ import donkey.bora.com.network.IRequest;
 
 public class IntroController implements IController {
 
-    private OnAuthorizationCallback onAuthorizationCallback;
-
     public interface OnAuthorizationCallback {
         void callback(boolean isAuthorizedUser);
     }
 
     public void requestPreCheck(final String token, final OnAuthorizationCallback onAuthorizationCallback) {
-        this.onAuthorizationCallback = onAuthorizationCallback;
 
         IRequest request = ApiRequest.getInstance().request(IRequest.class);
         request.preCheck(token).enqueue(new JsonResponseWrapper<PreCheckVO>() {

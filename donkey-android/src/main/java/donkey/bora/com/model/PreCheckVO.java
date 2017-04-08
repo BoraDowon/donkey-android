@@ -1,5 +1,11 @@
 package donkey.bora.com.model;
 
 public class PreCheckVO {
-    boolean result;
+
+    private boolean result;
+
+    public boolean isResultOK() {
+        return result;
+    }
+
 }

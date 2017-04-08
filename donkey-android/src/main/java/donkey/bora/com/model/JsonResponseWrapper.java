@@ -8,14 +8,15 @@ import retrofit2.Response;
 
 public abstract class JsonResponseWrapper<T> implements Callback<JsonResponse<T>> {
 
-    private static final String TAG = "donkey";
-
+    private static final String TAG = "http";
 
     @Override
     public void onResponse(Call<JsonResponse<T>> call, Response<JsonResponse<T>> response) {
         if (response.body() != null) {
             if ("200".equals(response.body().getCode())) {
+                Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg());
                 callback(response.body().getData(), true);
+                return;
             }
             Log.e(TAG, "[code]: " + response.body().getCode() + ", [msg]: " + response.body().getMsg());
         } else {

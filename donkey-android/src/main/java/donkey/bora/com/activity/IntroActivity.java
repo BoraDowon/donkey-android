@@ -30,32 +30,12 @@ public class IntroActivity extends AppCompatActivity {
         super.onStart();
 
         IntroController controller = new IntroController();
-        //controller.requestPreCheck(onHelloCallback);
-        controller.requestHello(onHelloCallback);
+        controller.requestPreCheck("TEST-TOKEN", onAuthorizationCallback);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
-        final boolean isFromAuth = getIntent().getBooleanExtra("FROM_AUTH", false);
-        if (isFromAuth) {
-            titleTextView.setText("이제 시작합니다!");
-        }
-
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-              @Override
-              public void run() {
-                  if (isFromAuth) {
-                      startActivityForResult(new Intent(IntroActivity.this, BoardMainActivity.class), 1);
-                  } else {
-                      startActivityForResult(new Intent(IntroActivity.this, WelcomeActivity.class), 1);
-                  }
-              }
-        }, 2000);
-
     }
 
     @Override
@@ -69,17 +49,25 @@ public class IntroActivity extends AppCompatActivity {
         // Nothing. To block back key
     }
 
-    private IntroController.OnHelloCallback onHelloCallback = new IntroController.OnHelloCallback() {
+    private IntroController.OnAuthorizationCallback onAuthorizationCallback = new IntroController.OnAuthorizationCallback() {
         @Override
-        public void success() {
-            // FIXME
-            Log.d("doa", "success");
-        }
+        public void callback(final boolean isAuthorizedUser) {
+            final boolean isFromAuth = getIntent().getBooleanExtra("FROM_AUTH", false);
+            if (isFromAuth) {
+                titleTextView.setText("이제 시작합니다!");
+            }
 
-        @Override
-        public void fail() {
-            // FIXME
-            Log.d("doa", "fail");
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (isAuthorizedUser) {
+                        startActivityForResult(new Intent(IntroActivity.this, BoardMainActivity.class), 1);
+                    } else {
+                        startActivityForResult(new Intent(IntroActivity.this, WelcomeActivity.class), 1);
+                    }
+                }
+            }, 2000);
         }
     };
 }

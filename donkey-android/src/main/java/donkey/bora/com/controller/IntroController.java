@@ -7,41 +7,20 @@ import donkey.bora.com.network.IRequest;
 
 public class IntroController implements IController {
 
-    private OnHelloCallback onHelloCallback;
+    private OnAuthorizationCallback onAuthorizationCallback;
 
-    public interface OnHelloCallback {
-        void success();
-        void fail();
+    public interface OnAuthorizationCallback {
+        void callback(boolean isAuthorizedUser);
     }
 
-    /*public void requestPreCheck(final OnHelloCallback onHelloCallback) {
-        this.onHelloCallback = onHelloCallback;
+    public void requestPreCheck(final String token, final OnAuthorizationCallback onAuthorizationCallback) {
+        this.onAuthorizationCallback = onAuthorizationCallback;
 
         IRequest request = ApiRequest.getInstance().request(IRequest.class);
-        request.preCheck("TEST-TOKEN").enqueue(new JsonResponseWrapper<PreCheckVO>() {
+        request.preCheck(token).enqueue(new JsonResponseWrapper<PreCheckVO>() {
             @Override
             public void callback(PreCheckVO data, boolean isSuccess) {
-                if (isSuccess) {
-                    onHelloCallback.success();
-                } else {
-                    onHelloCallback.fail();
-                }
-            }
-        });
-    }*/
-
-    public void requestHello(final OnHelloCallback onHelloCallback) {
-        this.onHelloCallback = onHelloCallback;
-
-        IRequest request = ApiRequest.getInstance().request(IRequest.class);
-        request.hello().enqueue(new JsonResponseWrapper<Object>() {
-            @Override
-            public void callback(Object data, boolean isSuccess) {
-                if (isSuccess) {
-                    onHelloCallback.success();
-                } else {
-                    onHelloCallback.fail();
-                }
+                onAuthorizationCallback.callback(data.isResultOK());
             }
         });
     }

@@ -1,4 +1,4 @@
-package donkey.bora.com.myapplication;
+package donkey.bora.com;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("donkey.bora.com.myapplication", appContext.getPackageName());
+        assertEquals("donkey.bora.com", appContext.getPackageName());
     }
 }

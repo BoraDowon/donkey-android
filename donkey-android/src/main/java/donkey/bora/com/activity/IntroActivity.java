@@ -4,11 +4,18 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donkey.bora.com.R;
+import donkey.bora.com.http.ApiRequest;
+import donkey.bora.com.http.IRequest;
+import donkey.bora.com.model.Hello;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -23,6 +30,23 @@ public class IntroActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        IRequest request = ApiRequest.getInstance().request(IRequest.class);
+        request.hello().enqueue(new Callback<Hello>() {
+            @Override
+            public void onResponse(Call<Hello> call, Response<Hello> response) {
+                Log.d("doa", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Hello> call, Throwable t) {
+                Log.d("doa", "failed!" + t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onResume() {

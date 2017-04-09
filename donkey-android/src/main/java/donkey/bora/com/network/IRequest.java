@@ -2,7 +2,6 @@ package donkey.bora.com.network;
 
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
-import donkey.bora.com.model.JsonResponse;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.model.PreCheckVO;
 import retrofit2.Call;
@@ -15,7 +14,7 @@ public interface IRequest {
     String BASE_URL = "http://211.201.190.29:8080";
 
     @GET("pre-check")
-    Call<JsonResponse<PreCheckVO>> preCheck(@Query("token") String token);
+    Call<JsonResponse<PreCheckVO>> preCheck();
 
     @GET("email-check")
     Call<JsonResponse<EmailCheckVO>> emailValidateCheck(@Query("email") String email);

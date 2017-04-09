@@ -2,7 +2,7 @@ package donkey.bora.com.controller;
 
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
-import donkey.bora.com.model.JsonResponseWrapper;
+import donkey.bora.com.network.JsonResponseWrapper;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.network.ApiRequest;
 import donkey.bora.com.network.IRequest;

@@ -30,7 +30,7 @@ public class IntroActivity extends AppCompatActivity {
         super.onStart();
 
         IntroController controller = new IntroController();
-        controller.requestPreCheck("TEST-TOKEN", onAuthorizationCallback);
+        controller.requestPreCheck(onAuthorizationCallback);
     }
 
     @Override

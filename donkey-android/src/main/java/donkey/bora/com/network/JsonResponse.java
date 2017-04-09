@@ -1,4 +1,4 @@
-package donkey.bora.com.model;
+package donkey.bora.com.network;
 
 import java.io.Serializable;
 

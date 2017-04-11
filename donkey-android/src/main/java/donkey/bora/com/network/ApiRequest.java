@@ -17,35 +17,45 @@ public class ApiRequest {
     private static ApiRequest instance;
 
     private Retrofit retrofit;
+    private Retrofit retrofitWithToken;
 
     private ApiRequest() {
 
-        Gson gson = new GsonBuilder()
+        retrofit = new Retrofit.Builder()
+                .baseUrl(IRequest.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(createGson()))
+                .build();
+
+        retrofitWithToken = new Retrofit.Builder()
+                .baseUrl(IRequest.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(createGson()))
+                .client(getHttpTokenBuilder().build())
+                .build();
+    }
+
+    private Gson createGson() {
+        return new GsonBuilder()
                 .setLenient()
                 .create();
+    }
 
+    private OkHttpClient.Builder getHttpTokenBuilder() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
 
             @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
+            public Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("User-Agent", "Donkey")
-                        .header("authorization", "token " + "TOKEN_TEMP") // FIXME
+                        .header("HTTP_X_AUTH_TOKEN", "BoraToken " + "111111") // FIXME
                         .method(original.method(), original.body())
                         .build();
 
                 return chain.proceed(request);
             }
         });
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(IRequest.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpClient.build())
-                .build();
+        return httpClient;
     }
 
     public static ApiRequest getInstance() {
@@ -61,6 +71,10 @@ public class ApiRequest {
 
     public <T> T request(final Class<T> cls) {
         return retrofit.create(cls);
+    }
+
+    public <T> T requestWithToken(final Class<T> cls) {
+        return retrofitWithToken.create(cls);
     }
 
 }

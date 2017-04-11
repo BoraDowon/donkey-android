@@ -97,7 +97,10 @@ public class EmailAuthActivity extends AppCompatActivity {
                     introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(introIntent);
                 } else {
-                    startActivity(new Intent(EmailAuthActivity.this, RegisterActivity.class));
+                    Intent registerIntent = new Intent(EmailAuthActivity.this, RegisterActivity.class);
+                    registerIntent.putExtra("email", emailEdit.getText().toString());
+                    registerIntent.putExtra("pinCode", pinCodeEdit.getText().toString());
+                    startActivity(registerIntent);
                 }
             } else {
                 Toast.makeText(EmailAuthActivity.this, pinCodeCheckVO.getMsg(), Toast.LENGTH_SHORT).show();

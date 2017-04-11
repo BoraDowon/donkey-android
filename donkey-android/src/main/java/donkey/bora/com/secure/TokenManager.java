@@ -1,7 +1,5 @@
 package donkey.bora.com.secure;
 
-import android.os.Environment;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,9 +12,14 @@ public class TokenManager {
 
     private static final String FILE_NAME = "donkey_pref.ini";
     private static final String GUEST_TOKEN = "";
+    private static String defaultPath = "";
 
-    public static String load(String path) {
-        String dirPath = path;
+    public static void init(String path) {
+        defaultPath = path;
+    }
+
+    public static String load() {
+        String dirPath = defaultPath;
         File savedFile = new File(dirPath + FILE_NAME);
         if (!savedFile.exists()) {
             return GUEST_TOKEN;
@@ -33,7 +36,7 @@ public class TokenManager {
             e.printStackTrace();
         } finally {
             try {
-                br.close();
+                if (br != null) br.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -43,6 +46,7 @@ public class TokenManager {
     }
 
     public static void save(String token, String path) {
+        defaultPath = path;
         File filePath = new File(path);
         if (!filePath.exists()) {
             filePath.mkdir();
@@ -58,7 +62,7 @@ public class TokenManager {
             e.printStackTrace();
         } finally {
             try {
-                bw.close();
+                if (bw != null) bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,11 +70,6 @@ public class TokenManager {
     }
 
     public static String getDefaultPath() {
-        return getInternalFolder();
+        return defaultPath;
     }
-
-    private static String getInternalFolder() {
-        return Environment.getDataDirectory().getAbsolutePath();
-    }
-
 }

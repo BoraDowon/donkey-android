@@ -21,7 +21,7 @@ public class TokenManagerTest {
 
         String path = "test/";
         TokenManager.save("123456", path);
-        String token = TokenManager.load(path);
+        String token = TokenManager.load();
         Assert.assertThat(token, is("123456"));
     }
 }

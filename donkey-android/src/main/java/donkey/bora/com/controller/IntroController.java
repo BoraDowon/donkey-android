@@ -14,7 +14,7 @@ public class IntroController implements IController {
 
     public void requestPreCheck(final OnAuthorizationCallback onAuthorizationCallback) {
 
-        String token = TokenManager.load(TokenManager.getDefaultPath());
+        String token = TokenManager.load();
 
         IRequest request = ApiRequest.getInstance().request(IRequest.class);
         request.preCheck(token).enqueue(new JsonResponseWrapper<PreCheckVO>() {

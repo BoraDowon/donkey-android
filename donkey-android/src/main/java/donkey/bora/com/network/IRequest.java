@@ -4,8 +4,12 @@ import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.model.PreCheckVO;
+import donkey.bora.com.model.RegisterResponseVO;
+import donkey.bora.com.model.RegisterSendInfo;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface IRequest {
@@ -25,4 +29,8 @@ public interface IRequest {
     @GET("confirmAuthKey")
     Call<JsonResponse<PinCodeCheckVO>> pinCodeCheck(@Query("email") String email,
                                                     @Query("auth_code") String pinCode);
+
+    @POST("registration")
+    Call<JsonResponse<RegisterResponseVO>> register(@Body RegisterSendInfo info);
+
 }

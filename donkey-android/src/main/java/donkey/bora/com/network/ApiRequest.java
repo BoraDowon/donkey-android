@@ -49,7 +49,7 @@ public class ApiRequest {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("HTTP_X_AUTH_TOKEN", "BoraToken " + TokenManager.load(TokenManager.getDefaultPath()))
+                        .header("HTTP_X_AUTH_TOKEN", "BoraToken " + TokenManager.load())
                         .method(original.method(), original.body())
                         .build();
 

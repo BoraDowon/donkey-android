@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donkey.bora.com.R;
 import donkey.bora.com.controller.IntroController;
+import donkey.bora.com.secure.TokenManager;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -23,6 +23,8 @@ public class IntroActivity extends AppCompatActivity {
 
         setContentView(R.layout.intro_layout);
         ButterKnife.bind(this);
+        
+        TokenManager.init(getFilesDir().getAbsolutePath() + "/PREF/");
     }
 
     @Override

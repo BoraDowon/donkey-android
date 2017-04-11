@@ -14,7 +14,7 @@ public interface IRequest {
     String BASE_URL = "http://211.201.190.29:8080";
 
     @GET("preCheck")
-    Call<JsonResponse<PreCheckVO>> preCheck();
+    Call<JsonResponse<PreCheckVO>> preCheck(@Query("token") String token);
 
     @GET("emailCheck")
     Call<JsonResponse<EmailCheckVO>> emailValidateCheck(@Query("email") String email);

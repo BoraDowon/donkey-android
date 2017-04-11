@@ -14,7 +14,7 @@ public class IntroController implements IController {
     public void requestPreCheck(final OnAuthorizationCallback onAuthorizationCallback) {
 
         IRequest request = ApiRequest.getInstance().request(IRequest.class);
-        request.preCheck().enqueue(new JsonResponseWrapper<PreCheckVO>() {
+        request.preCheck("TEMP-TOKEN").enqueue(new JsonResponseWrapper<PreCheckVO>() {
             @Override
             public void callback(PreCheckVO data, boolean isSuccess) {
                 onAuthorizationCallback.callback(isSuccess ? data.isResultOK() : false);

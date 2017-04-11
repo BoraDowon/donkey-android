@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
+import donkey.bora.com.secure.TokenManager;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,7 +49,7 @@ public class ApiRequest {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("HTTP_X_AUTH_TOKEN", "BoraToken " + "111111") // FIXME
+                        .header("HTTP_X_AUTH_TOKEN", "BoraToken " + TokenManager.load(TokenManager.getDefaultPath()))
                         .method(original.method(), original.body())
                         .build();
 

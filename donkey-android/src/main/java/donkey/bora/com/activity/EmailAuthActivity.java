@@ -18,6 +18,7 @@ import donkey.bora.com.controller.EmailAuthController;
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
 import donkey.bora.com.model.PinCodeCheckVO;
+import donkey.bora.com.secure.TokenManager;
 
 public class EmailAuthActivity extends AppCompatActivity {
 
@@ -89,7 +90,8 @@ public class EmailAuthActivity extends AppCompatActivity {
         public void callback(PinCodeCheckVO pinCodeCheckVO) {
             if (pinCodeCheckVO.isConfirm()) {
                 if (pinCodeCheckVO.isExistUser()) {
-                    // FIXME: save token
+                    TokenManager.save(pinCodeCheckVO.getToken(), TokenManager.getDefaultPath());
+
                     Intent introIntent = new Intent(EmailAuthActivity.this, IntroActivity.class);
                     introIntent.putExtra("FROM_AUTH", true);
                     introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

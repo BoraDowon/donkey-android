@@ -13,16 +13,16 @@ public interface IRequest {
     //String BASE_URL = "http://10.0.2.2:8000";
     String BASE_URL = "http://211.201.190.29:8080";
 
-    @GET("pre-check")
+    @GET("preCheck")
     Call<JsonResponse<PreCheckVO>> preCheck();
 
-    @GET("email-check")
+    @GET("emailCheck")
     Call<JsonResponse<EmailCheckVO>> emailValidateCheck(@Query("email") String email);
 
-    @GET("gen-auth-key")
+    @GET("genAuthKey")
     Call<JsonResponse<EmailAuthSendVO>> emailSend(@Query("email") String email);
 
-    @GET("confirm-auth-key")
+    @GET("confirmAuthKey")
     Call<JsonResponse<PinCodeCheckVO>> pinCodeCheck(@Query("email") String email,
                                                     @Query("auth_code") String pinCode);
 }

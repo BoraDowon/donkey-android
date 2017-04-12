@@ -9,6 +9,13 @@ public class RegisterSendInfo {
     @SerializedName("auth_code")
     String authCode;
 
+    @SerializedName("department_id")
+    long departmentId;
+
+    public void setDepartmentId(long departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

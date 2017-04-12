@@ -2,6 +2,7 @@ package donkey.bora.com.network;
 
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
+import donkey.bora.com.model.IsExistUserResponseVO;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.model.PreCheckVO;
 import donkey.bora.com.model.RegisterResponseVO;
@@ -25,6 +26,10 @@ public interface IRequest {
 
     @GET("genAuthKey")
     Call<JsonResponse<EmailAuthSendVO>> emailSend(@Query("email") String email);
+
+    @GET("isExistUser")
+    Call<JsonResponse<IsExistUserResponseVO>> isExistUser(@Query("email") String email,
+                                                          @Query("auth_code") String pinCode);
 
     @GET("confirmAuthKey")
     Call<JsonResponse<PinCodeCheckVO>> pinCodeCheck(@Query("email") String email,

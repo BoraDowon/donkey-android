@@ -2,6 +2,7 @@ package donkey.bora.com.controller;
 
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
+import donkey.bora.com.model.IsExistUserResponseVO;
 import donkey.bora.com.network.JsonResponseWrapper;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.network.ApiRequest;
@@ -38,16 +39,30 @@ public class EmailAuthController implements IController {
         });
     }
 
-    public interface OnPinCodeConfrimCallback {
+    public interface OnPinCodeConfirmCallback {
         void callback(PinCodeCheckVO pinCodeCheckVO);
     }
 
-    public void requestPinCodeConfirm(String email, String pinCode, final OnPinCodeConfrimCallback onPinCodeConfrimCallback) {
+    public void requestPinCodeConfirm(String email, String pinCode, final OnPinCodeConfirmCallback onPinCodeConfrimCallback) {
         IRequest request = ApiRequest.getInstance().request(IRequest.class);
         request.pinCodeCheck(email, pinCode).enqueue(new JsonResponseWrapper<PinCodeCheckVO>() {
             @Override
             public void callback(PinCodeCheckVO data, boolean isSuccess) {
                 onPinCodeConfrimCallback.callback(data);
+            }
+        });
+    }
+
+    public interface OnIsExistUserCallback {
+        void callback(IsExistUserResponseVO isExistUserResponseVO);
+    }
+
+    public void requestExistUser(String email, String pinCode, final OnIsExistUserCallback onIsExistUserCallback) {
+        IRequest request = ApiRequest.getInstance().request(IRequest.class);
+        request.isExistUser(email, pinCode).enqueue(new JsonResponseWrapper<IsExistUserResponseVO>() {
+            @Override
+            public void callback(IsExistUserResponseVO data, boolean isSuccess) {
+                onIsExistUserCallback.callback(data);
             }
         });
     }

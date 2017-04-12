@@ -3,6 +3,7 @@ package donkey.bora.com.network;
 import donkey.bora.com.model.DepartmentListResponseVO;
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
+import donkey.bora.com.model.InitResponseVO;
 import donkey.bora.com.model.IsExistUserResponseVO;
 import donkey.bora.com.model.PinCodeCheckVO;
 import donkey.bora.com.model.PreCheckVO;
@@ -42,5 +43,8 @@ public interface IRequest {
 
     @POST("registration")
     Call<JsonResponse<RegisterResponseVO>> register(@Body RegisterSendInfo info);
+
+    @GET("init")
+    Call<JsonResponse<InitResponseVO>> init();
 
 }

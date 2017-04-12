@@ -1,5 +1,6 @@
 package donkey.bora.com.controller;
 
+import donkey.bora.com.model.InitResponseVO;
 import donkey.bora.com.network.JsonResponseWrapper;
 import donkey.bora.com.model.PreCheckVO;
 import donkey.bora.com.network.ApiRequest;
@@ -21,6 +22,20 @@ public class IntroController implements IController {
             @Override
             public void callback(PreCheckVO data, boolean isSuccess) {
                 onAuthorizationCallback.callback(isSuccess ? data.isResultOK() : false);
+            }
+        });
+    }
+
+    public interface OnInitCallback {
+        void callback(InitResponseVO initResponseVO);
+    }
+
+    public void requestInit(final OnInitCallback onInitCallback) {
+        IRequest request = ApiRequest.getInstance().requestWithToken(IRequest.class);
+        request.init().enqueue(new JsonResponseWrapper<InitResponseVO>() {
+            @Override
+            public void callback(InitResponseVO data, boolean isSuccess) {
+                onInitCallback.callback(data);
             }
         });
     }

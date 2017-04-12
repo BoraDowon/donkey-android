@@ -10,12 +10,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import donkey.bora.com.R;
 import donkey.bora.com.controller.IntroController;
+import donkey.bora.com.model.InitResponseVO;
 import donkey.bora.com.secure.TokenManager;
 
 public class IntroActivity extends AppCompatActivity {
 
     @BindView(R.id.title)
     TextView titleTextView;
+
+    private IntroController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,7 @@ public class IntroActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        IntroController controller = new IntroController();
+        controller = new IntroController();
         controller.requestPreCheck(onAuthorizationCallback);
     }
 
@@ -59,15 +62,31 @@ public class IntroActivity extends AppCompatActivity {
                 titleTextView.setText("이제 시작합니다!");
             }
 
+            if (isAuthorizedUser) {
+                controller.requestInit(onInitCallback);
+            } else {
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivityForResult(new Intent(IntroActivity.this, WelcomeActivity.class), 1);
+                    }
+                }, 2000);
+            }
+        }
+    };
+
+    private IntroController.OnInitCallback onInitCallback = new IntroController.OnInitCallback() {
+        @Override
+        public void callback(final InitResponseVO initResponseVO) {
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (isAuthorizedUser) {
-                        startActivityForResult(new Intent(IntroActivity.this, BoardMainActivity.class), 1);
-                    } else {
-                        startActivityForResult(new Intent(IntroActivity.this, WelcomeActivity.class), 1);
-                    }
+                    Intent i = new Intent(IntroActivity.this, BoardMainActivity.class);
+                    i.putExtra("init", initResponseVO);
+
+                    startActivityForResult(i, 1);
                 }
             }, 2000);
         }

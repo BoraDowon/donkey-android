@@ -9,12 +9,16 @@ public class ArticleListVO {
     private List<ArticleVO> articles;
     @SerializedName("board_id")
     private long boardId;
-
+    @SerializedName("next_url")
+    private String nextUrl;
     public List<ArticleVO> getArticles() {
         return articles;
     }
 
     public long getBoardId() {
         return boardId;
+    }
+    public String getNextUrl() {
+        return nextUrl;
     }
 }

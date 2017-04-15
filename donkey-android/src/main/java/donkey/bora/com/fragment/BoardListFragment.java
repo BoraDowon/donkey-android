@@ -3,12 +3,14 @@ package donkey.bora.com.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,12 @@ public class BoardListFragment extends Fragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    SwipyRefreshLayout swipyRefreshLayout;
 
     private BoardContentItemVO content;
     private ArticlesListAdapter adapter;
     private BoardListController controller;
+    private String nextUrl;
 
     public void setContent(BoardContentItemVO boardContentItemVO) {
         this.content = boardContentItemVO;
@@ -48,8 +51,8 @@ public class BoardListFragment extends Fragment {
     private BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.setRefreshing(false);
+            if (swipyRefreshLayout.isRefreshing()) {
+                swipyRefreshLayout.setRefreshing(false);
                 adapter = null;
             }
             refresh(articleListVO);
@@ -69,6 +72,7 @@ public class BoardListFragment extends Fragment {
                 adapter.addArticles(articleListVO.getArticles());
                 adapter.notifyDataSetChanged();
             }
+            nextUrl = articleListVO.getNextUrl();
 
         } else {
             // TEST mode
@@ -111,10 +115,17 @@ public class BoardListFragment extends Fragment {
         View view = inflater.inflate(R.layout.board_list_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                controller.requestArticles(content.getId(), onArticleListCallback);
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction == SwipyRefreshLayoutDirection.TOP) {
+                    controller.requestArticles(content.getId(), onArticleListCallback);
+                } else {
+                    // FIXME: call nextUrl
+                    if (swipyRefreshLayout.isRefreshing()) {
+                        swipyRefreshLayout.setRefreshing(false);
+                    }
+                }
             }
         });
         return view;

@@ -16,4 +16,40 @@ public class ArticleVO {
     @SerializedName("yellow_cards")
     private long yellowCards;
     private String likes;
+
+    public long getId() {
+        return id;
+    }
+
+    public UserVO getUser() {
+        return user;
+    }
+
+    public BoardVO getBoard() {
+        return board;
+    }
+
+    public long getStatus() {
+        return status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public long getViews() {
+        return views;
+    }
+
+    public long getYellowCards() {
+        return yellowCards;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donkey.bora.com.R;
+import donkey.bora.com.adapter.ArticlesListAdapter;
 import donkey.bora.com.controller.BoardListController;
 import donkey.bora.com.model.ArticleListVO;
 import donkey.bora.com.model.BoardContentItemVO;
@@ -40,7 +41,10 @@ public class BoardListFragment extends Fragment {
     BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
-            // FIXME: Fetch articles
+            if (articleListVO != null && articleListVO.getArticles() != null) {
+                ArticlesListAdapter adapter = new ArticlesListAdapter();
+                adapter.setArticles(articleListVO.getArticles());
+            }
         }
     };
 

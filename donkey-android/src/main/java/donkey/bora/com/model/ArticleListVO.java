@@ -9,4 +9,12 @@ public class ArticleListVO {
     private List<ArticleVO> articles;
     @SerializedName("board_id")
     private long boardId;
+
+    public List<ArticleVO> getArticles() {
+        return articles;
+    }
+
+    public long getBoardId() {
+        return boardId;
+    }
 }

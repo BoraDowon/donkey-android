@@ -81,9 +81,11 @@ public class BoardListFragment extends Fragment {
         a3.setTitle("세번째 글입니다.");
         a3.setContent("오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~");
 
-        dummy.add(a1);
-        dummy.add(a2);
-        dummy.add(a3);
+        for (int i = 0; i < 10; i++) {
+            dummy.add(a1);
+            dummy.add(a2);
+            dummy.add(a3);
+        }
 
         return dummy;
     }

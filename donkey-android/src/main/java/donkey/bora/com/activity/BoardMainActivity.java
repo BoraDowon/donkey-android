@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -23,6 +24,8 @@ public class BoardMainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,9 @@ public class BoardMainActivity extends AppCompatActivity {
         setContentView(R.layout.board_main_layout);
         ButterKnife.bind(this);
         backPressCloseHandler = new BackPressCloseHandler(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.tool_bar_title);
 
         Intent i = getIntent();
         InitResponseVO initResponseVO = (InitResponseVO) i.getSerializableExtra("init");

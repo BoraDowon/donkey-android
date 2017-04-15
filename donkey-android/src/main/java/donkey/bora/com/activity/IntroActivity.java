@@ -88,7 +88,7 @@ public class IntroActivity extends AppCompatActivity {
 
                     startActivityForResult(i, 1);
                 }
-            }, 100);
+            }, 1000);
         }
     };
 }

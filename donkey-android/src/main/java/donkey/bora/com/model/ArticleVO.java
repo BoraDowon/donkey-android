@@ -8,7 +8,17 @@ public class ArticleVO {
     private UserVO user;
     private BoardVO board;
     private long status;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private String title;
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     private String content;
 
     // TODO: naming is not good

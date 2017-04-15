@@ -32,6 +32,7 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.titleTextView.setText(articles.get(position).getTitle());
+        holder.contentTextView.setText(articles.get(position).getContent());
     }
 
     @Override
@@ -43,11 +44,12 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
 
         @BindView(R.id.title)
         TextView titleTextView;
+        @BindView(R.id.content)
+        TextView contentTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 }

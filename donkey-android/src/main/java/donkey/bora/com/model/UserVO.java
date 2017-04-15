@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class UserVO implements Serializable {
     private long id;
+    private String email;
     private String username;
     private String nickname;
     @SerializedName("last_login")

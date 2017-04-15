@@ -27,7 +27,7 @@ public class BoardViewPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         BoardListFragment fragment = new BoardListFragment();
-        fragment.setDescription(boardContentItemVOs.get(position).getDesc());
+        fragment.setContent(boardContentItemVOs.get(position));
         return fragment;
     }
 

@@ -1,5 +1,6 @@
 package donkey.bora.com.network;
 
+import donkey.bora.com.model.ArticleListVO;
 import donkey.bora.com.model.DepartmentListResponseVO;
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
@@ -13,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface IRequest {
@@ -46,5 +48,8 @@ public interface IRequest {
 
     @GET("init")
     Call<JsonResponse<InitResponseVO>> init();
+
+    @GET("board/{b_id}")
+    Call<JsonResponse<ArticleListVO>> getArticleList(@Path("b_id") long boardId);
 
 }

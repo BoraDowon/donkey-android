@@ -43,7 +43,7 @@ public interface IRequest {
     Call<JsonResponse<DepartmentListResponseVO>> getDepartments(@Query("email") String email,
                                                                 @Query("auth_code") String pinCode);
 
-    @POST("registration")
+    @POST("registration/")
     Call<JsonResponse<RegisterResponseVO>> register(@Body RegisterSendInfo info);
 
     @GET("init")

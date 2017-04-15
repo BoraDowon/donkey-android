@@ -30,6 +30,8 @@ public class BoardListFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
     private BoardContentItemVO content;
+    private ArticlesListAdapter adapter;
+    private BoardListController controller;
 
     public void setContent(BoardContentItemVO boardContentItemVO) {
         this.content = boardContentItemVO;
@@ -39,30 +41,39 @@ public class BoardListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BoardListController controller = new BoardListController();
+        controller = new BoardListController();
         controller.requestArticles(content.getId(), onArticleListCallback);
     }
 
     private BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+                adapter = null;
+            }
             refresh(articleListVO);
         }
     };
 
     private void refresh(ArticleListVO articleListVO) {
         if (articleListVO != null && articleListVO.getArticles() != null) {
-            ArticlesListAdapter adapter = new ArticlesListAdapter();
-            adapter.setArticles(articleListVO.getArticles());
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(adapter);
+            if (adapter == null) {
+                adapter = new ArticlesListAdapter();
+                adapter.addArticles(articleListVO.getArticles());
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setAdapter(adapter);
+            } else {
+                adapter.addArticles(articleListVO.getArticles());
+                adapter.notifyDataSetChanged();
+            }
 
         } else {
             // TEST mode
-            ArticlesListAdapter adapter = new ArticlesListAdapter();
-            adapter.setArticles(getDummy());
+            adapter = new ArticlesListAdapter();
+            adapter.addArticles(getDummy());
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setHasFixedSize(true);
@@ -103,8 +114,7 @@ public class BoardListFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // FIXME: update
-                swipeRefreshLayout.setRefreshing(false);
+                controller.requestArticles(content.getId(), onArticleListCallback);
             }
         });
         return view;

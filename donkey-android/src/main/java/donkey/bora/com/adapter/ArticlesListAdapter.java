@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -16,10 +17,10 @@ import donkey.bora.com.model.ArticleVO;
 
 public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapter.ViewHolder> {
 
-    private List<ArticleVO> articles;
+    private List<ArticleVO> articles = new ArrayList<>();
 
-    public void setArticles(List<ArticleVO> articles) {
-        this.articles = articles;
+    public void addArticles(List<ArticleVO> articles) {
+        this.articles.addAll(articles);
     }
 
     @Override

@@ -3,12 +3,12 @@ package donkey.bora.com.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,10 @@ import donkey.bora.com.model.BoardContentItemVO;
 
 public class BoardListFragment extends Fragment {
 
-    @BindView(R.id.description)
-    TextView descTextView;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private BoardContentItemVO content;
 
@@ -43,27 +43,32 @@ public class BoardListFragment extends Fragment {
         controller.requestArticles(content.getId(), onArticleListCallback);
     }
 
-    BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
+    private BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
-            if (articleListVO != null && articleListVO.getArticles() != null) {
-                ArticlesListAdapter adapter = new ArticlesListAdapter();
-                adapter.setArticles(articleListVO.getArticles());
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(adapter);
-
-            } else {
-                ArticlesListAdapter adapter = new ArticlesListAdapter();
-                adapter.setArticles(getDummy());
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(adapter);
-            }
+            refresh(articleListVO);
         }
     };
+
+    private void refresh(ArticleListVO articleListVO) {
+        if (articleListVO != null && articleListVO.getArticles() != null) {
+            ArticlesListAdapter adapter = new ArticlesListAdapter();
+            adapter.setArticles(articleListVO.getArticles());
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
+
+        } else {
+            // TEST mode
+            ArticlesListAdapter adapter = new ArticlesListAdapter();
+            adapter.setArticles(getDummy());
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
+        }
+    }
 
     private List<ArticleVO> getDummy() {
 
@@ -95,8 +100,13 @@ public class BoardListFragment extends Fragment {
         View view = inflater.inflate(R.layout.board_list_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        descTextView.setText(content.getDesc());
-
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // FIXME: update
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 }

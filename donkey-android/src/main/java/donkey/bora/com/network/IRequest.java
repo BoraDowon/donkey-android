@@ -1,6 +1,8 @@
 package donkey.bora.com.network;
 
 import donkey.bora.com.model.ArticleListVO;
+import donkey.bora.com.model.CreateArticleBody;
+import donkey.bora.com.model.CreateArticleResponseVO;
 import donkey.bora.com.model.DepartmentListResponseVO;
 import donkey.bora.com.model.EmailAuthSendVO;
 import donkey.bora.com.model.EmailCheckVO;
@@ -49,7 +51,11 @@ public interface IRequest {
     @GET("init")
     Call<JsonResponse<InitResponseVO>> init();
 
-    @GET("board/{b_id}")
+    @GET("boards/{b_id}")
     Call<JsonResponse<ArticleListVO>> getArticleList(@Path("b_id") long boardId);
+
+    @POST("boards/{b_id}")
+    Call<JsonResponse<CreateArticleResponseVO>> createArticle(@Path("b_id") long boardId,
+                                                              @Body CreateArticleBody body);
 
 }

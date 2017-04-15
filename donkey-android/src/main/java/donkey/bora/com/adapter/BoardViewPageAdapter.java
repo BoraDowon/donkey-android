@@ -35,4 +35,9 @@ public class BoardViewPageAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return boardContentItemVOs.size();
     }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return boardContentItemVOs.get(position).getTitle();
+    }
 }

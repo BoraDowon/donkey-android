@@ -50,10 +50,8 @@ public class BoardMainActivity extends AppCompatActivity {
             String nickName = initResponseVO.getUser() != null ? initResponseVO.getUser().getNickname() : "guest";
             Toast.makeText(this, "환영합니다 " + nickName + "님", Toast.LENGTH_SHORT).show();
 
-            for (BoardContentItemVO itemVO: initResponseVO.getBoard()) {
-                tabLayout.addTab(tabLayout.newTab().setText(itemVO.getTitle()));
-            }
             tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tabLayout.setupWithViewPager(viewPager);
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {

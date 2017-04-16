@@ -18,6 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface IRequest {
 
@@ -53,6 +54,9 @@ public interface IRequest {
 
     @GET("boards/{b_id}")
     Call<JsonResponse<ArticleListVO>> getArticleList(@Path("b_id") long boardId);
+
+    @GET
+    Call<JsonResponse<ArticleListVO>> getNextArticleList(@Url String url);
 
     @POST("boards/{b_id}")
     Call<JsonResponse<CreateArticleResponseVO>> createArticle(@Path("b_id") long boardId,

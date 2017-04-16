@@ -20,7 +20,9 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
     private List<ArticleVO> articles = new ArrayList<>();
 
     public void addArticles(List<ArticleVO> articles) {
-        this.articles.addAll(articles);
+        if (articles != null && articles.size() > 0) {
+            this.articles.addAll(articles);
+        }
     }
 
     @Override

@@ -16,6 +16,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="vertical"
             android:padding="3dp"/>
 
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>

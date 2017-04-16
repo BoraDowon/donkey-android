@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import donkey.bora.com.R;
 import donkey.bora.com.adapter.ArticlesListAdapter;
-import donkey.bora.com.controller.BoardListController;
+import donkey.bora.com.controller.BoardListFragmentController;
 import donkey.bora.com.model.ArticleListVO;
 import donkey.bora.com.model.ArticleVO;
 import donkey.bora.com.model.BoardContentItemVO;
@@ -33,7 +33,7 @@ public class BoardListFragment extends Fragment {
 
     private BoardContentItemVO content;
     private ArticlesListAdapter adapter;
-    private BoardListController controller;
+    private BoardListFragmentController controller;
     private String nextUrl;
 
     public void setContent(BoardContentItemVO boardContentItemVO) {
@@ -44,34 +44,27 @@ public class BoardListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        controller = new BoardListController();
+        controller = new BoardListFragmentController();
         controller.requestArticles(content.getId(), onArticleListCallback);
     }
 
-    private BoardListController.OnArticleListCallback onArticleListCallback = new BoardListController.OnArticleListCallback() {
+    private BoardListFragmentController.OnArticleListCallback onArticleListCallback = new BoardListFragmentController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
             if (swipyRefreshLayout.isRefreshing()) {
                 swipyRefreshLayout.setRefreshing(false);
-                adapter = null;
             }
-            refresh(articleListVO);
+            reload(articleListVO);
         }
     };
 
-    private void refresh(ArticleListVO articleListVO) {
+    private void reload(ArticleListVO articleListVO) {
         if (articleListVO != null && articleListVO.getArticles() != null) {
-
-            if (adapter == null) {
-                adapter = new ArticlesListAdapter();
-                adapter.addArticles(articleListVO.getArticles());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(adapter);
-            } else {
-                adapter.addArticles(articleListVO.getArticles());
-                adapter.notifyDataSetChanged();
-            }
+            adapter = new ArticlesListAdapter();
+            adapter.addArticles(articleListVO.getArticles());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
             nextUrl = articleListVO.getNextUrl();
 
         } else {
@@ -121,13 +114,25 @@ public class BoardListFragment extends Fragment {
                 if (direction == SwipyRefreshLayoutDirection.TOP) {
                     controller.requestArticles(content.getId(), onArticleListCallback);
                 } else {
-                    // FIXME: call nextUrl
-                    if (swipyRefreshLayout.isRefreshing()) {
-                        swipyRefreshLayout.setRefreshing(false);
-                    }
+                    controller.requestNextArticleList(nextUrl, onNextArticleListCallback);
                 }
             }
         });
         return view;
     }
+
+    private BoardListFragmentController.OnNextArticleListCallback onNextArticleListCallback = new BoardListFragmentController.OnNextArticleListCallback() {
+        @Override
+        public void callback(ArticleListVO articleListVO) {
+            if (articleListVO != null) {
+                nextUrl = articleListVO.getNextUrl();
+                adapter.addArticles(articleListVO.getArticles());
+                adapter.notifyDataSetChanged();
+            }
+
+            if (swipyRefreshLayout.isRefreshing()) {
+                swipyRefreshLayout.setRefreshing(false);
+            }
+        }
+    };
 }

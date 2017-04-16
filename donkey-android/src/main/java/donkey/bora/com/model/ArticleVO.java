@@ -2,45 +2,31 @@ package donkey.bora.com.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class ArticleVO {
 
     private long id;
-    private UserVO user;
-    private BoardVO board;
-    private long status;
+    private String nickName;
+    private String title;
+    private long views;
+    private String likes;
+    private String content;
+    @SerializedName("created_at")
+    private Date createTime;
+    @SerializedName("yellow_cards")
+    private long yellowCards;
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    private String title;
-
     public void setContent(String content) {
         this.content = content;
     }
 
-    private String content;
-
-    // TODO: naming is not good
-    private long views;
-    @SerializedName("yellow_cards")
-    private long yellowCards;
-    private String likes;
-
     public long getId() {
         return id;
-    }
-
-    public UserVO getUser() {
-        return user;
-    }
-
-    public BoardVO getBoard() {
-        return board;
-    }
-
-    public long getStatus() {
-        return status;
     }
 
     public String getTitle() {
@@ -51,15 +37,4 @@ public class ArticleVO {
         return content;
     }
 
-    public long getViews() {
-        return views;
-    }
-
-    public long getYellowCards() {
-        return yellowCards;
-    }
-
-    public String getLikes() {
-        return likes;
-    }
 }

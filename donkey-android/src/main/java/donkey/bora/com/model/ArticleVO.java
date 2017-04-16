@@ -7,7 +7,7 @@ import java.util.Date;
 public class ArticleVO {
 
     private long id;
-    private String nickName;
+    private String nickname;
     private String title;
     private long views;
     private String likes;

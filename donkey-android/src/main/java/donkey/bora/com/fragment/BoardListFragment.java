@@ -3,17 +3,13 @@ package donkey.bora.com.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,20 +17,19 @@ import donkey.bora.com.R;
 import donkey.bora.com.adapter.ArticlesListAdapter;
 import donkey.bora.com.controller.BoardListFragmentController;
 import donkey.bora.com.model.ArticleListVO;
-import donkey.bora.com.model.ArticleVO;
 import donkey.bora.com.model.BoardContentItemVO;
 
 public class BoardListFragment extends Fragment {
 
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh_layout)
-    SwipyRefreshLayout swipyRefreshLayout;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     private BoardContentItemVO content;
     private ArticlesListAdapter adapter;
     private BoardListFragmentController controller;
+
     private String nextUrl;
+    private boolean hasNextUrlRequest;
 
     public void setContent(BoardContentItemVO boardContentItemVO) {
         this.content = boardContentItemVO;
@@ -51,8 +46,8 @@ public class BoardListFragment extends Fragment {
     private BoardListFragmentController.OnArticleListCallback onArticleListCallback = new BoardListFragmentController.OnArticleListCallback() {
         @Override
         public void callback(ArticleListVO articleListVO) {
-            if (swipyRefreshLayout.isRefreshing()) {
-                swipyRefreshLayout.setRefreshing(false);
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
             }
             reload(articleListVO);
         }
@@ -62,60 +57,43 @@ public class BoardListFragment extends Fragment {
         if (articleListVO != null && articleListVO.getArticles() != null) {
             adapter = new ArticlesListAdapter();
             adapter.addArticles(articleListVO.getArticles());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(adapter);
             nextUrl = articleListVO.getNextUrl();
-
-        } else {
-            // TEST mode
-            adapter = new ArticlesListAdapter();
-            adapter.addArticles(getDummy());
-
+            hasNextUrlRequest = true;
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter);
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+
+                    float percent = computeScrollVerticalPercentage(recyclerView);
+                    if (hasNextUrlRequest && percent > 80f) {
+                        controller.requestNextArticleList(nextUrl, onNextArticleListCallback);
+                        hasNextUrlRequest = false;
+                    }
+                }
+            });
         }
     }
 
-    private List<ArticleVO> getDummy() {
-
-        //TEST
-        List<ArticleVO> dummy = new ArrayList<>();
-        ArticleVO a1 = new ArticleVO();
-        a1.setTitle("첫번째 글입니다.");
-        a1.setContent("오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~");
-
-        ArticleVO a2 = new ArticleVO();
-        a2.setTitle("두번째 글입니다.");
-        a2.setContent("오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~");
-
-        ArticleVO a3 = new ArticleVO();
-        a3.setTitle("세번째 글입니다.");
-        a3.setContent("오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~오늘 정말 재미있는 일이 있었어요. 어머니랑 장을 보러 갔는데~");
-
-        for (int i = 0; i < 10; i++) {
-            dummy.add(a1);
-            dummy.add(a2);
-            dummy.add(a3);
-        }
-
-        return dummy;
+    private float computeScrollVerticalPercentage(RecyclerView recyclerView) {
+        int extent = recyclerView.computeVerticalScrollExtent();
+        int range = recyclerView.computeVerticalScrollRange();
+        int offset = recyclerView.computeVerticalScrollOffset();
+        return 100f * offset / (range - extent);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.board_list_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        swipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction == SwipyRefreshLayoutDirection.TOP) {
-                    controller.requestArticles(content.getId(), onArticleListCallback);
-                } else {
-                    controller.requestNextArticleList(nextUrl, onNextArticleListCallback);
-                }
+            public void onRefresh() {
+                controller.requestArticles(content.getId(), onArticleListCallback);
             }
         });
         return view;
@@ -126,12 +104,12 @@ public class BoardListFragment extends Fragment {
         public void callback(ArticleListVO articleListVO) {
             if (articleListVO != null) {
                 nextUrl = articleListVO.getNextUrl();
+                if (!TextUtils.isEmpty(nextUrl)) {
+                    hasNextUrlRequest = true;
+                }
+
                 adapter.addArticles(articleListVO.getArticles());
                 adapter.notifyDataSetChanged();
-            }
-
-            if (swipyRefreshLayout.isRefreshing()) {
-                swipyRefreshLayout.setRefreshing(false);
             }
         }
     };

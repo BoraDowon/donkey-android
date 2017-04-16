@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +24,7 @@ public class BoardListFragment extends Fragment {
 
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.empty_notice_text) TextView emptyTextView;
 
     private BoardContentItemVO content;
     private ArticlesListAdapter adapter;
@@ -49,11 +51,11 @@ public class BoardListFragment extends Fragment {
             if (swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
             }
-            reload(articleListVO);
+            load(articleListVO);
         }
     };
 
-    private void reload(ArticleListVO articleListVO) {
+    private void load(ArticleListVO articleListVO) {
         if (articleListVO != null && articleListVO.getArticles() != null) {
             adapter = new ArticlesListAdapter();
             adapter.addArticles(articleListVO.getArticles());
@@ -75,7 +77,10 @@ public class BoardListFragment extends Fragment {
                     }
                 }
             });
+            return;
         }
+
+        emptyTextView.setVisibility(View.VISIBLE);
     }
 
     private float computeScrollVerticalPercentage(RecyclerView recyclerView) {
